@@ -1,0 +1,58 @@
+--[[
+🥷 Auto Fish Script by ChatGPT
+Untuk game: Fish It (By Atelier)
+Executor: Delta, Hydrogen, Fluxus
+--]]
+
+local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
+
+local Window = Rayfield:CreateWindow({
+   Name = "Fish It | Auto Fishing UI",
+   LoadingTitle = "Loading Fish Tool...",
+   LoadingSubtitle = "by ChatGPT",
+   ConfigurationSaving = {
+      Enabled = true,
+      FolderName = "FishItAuto",
+      FileName = "AutoFishSettings"
+   },
+   Discord = {
+      Enabled = false
+   },
+   KeySystem = false,
+})
+
+local autoFish = false
+
+-- Auto Fishing Function
+task.spawn(function()
+   while task.wait(0.1) do
+      if autoFish then
+         local args = {
+            [1] = "CaughtFish",
+            [2] = {
+               ["Username"] = game.Players.LocalPlayer.Name,
+               ["RodName"] = "DefaultRod",
+               ["Perfect"] = true,
+               ["Amazing"] = true
+            }
+         }
+
+         pcall(function()
+            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("FishEvent"):FireServer(unpack(args))
+         end)
+      end
+   end
+end)
+
+-- UI Toggle Button
+Rayfield:CreateToggle({
+   Name = "🎣 Auto Fish",
+   CurrentValue = false,
+   Flag = "AutoFishToggle",
+   Callback = function(Value)
+      autoFish = Value
+   end,
+})
+
+Rayfield:LoadConfiguration()
+
